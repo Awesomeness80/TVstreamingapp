@@ -362,15 +362,29 @@
     });
 
     document.addEventListener('keydown', (e) => {
+      const key = e.key;
+      const keyCode = e.keyCode || e.which;
+
+      const isUp = key === 'ArrowUp' || keyCode === 38;
+      const isDown = key === 'ArrowDown' || keyCode === 40;
+      const isLeft = key === 'ArrowLeft' || keyCode === 37;
+      const isRight = key === 'ArrowRight' || keyCode === 39;
+      const isEnter = key === 'Enter' || keyCode === 13;
+      const isBack = key === 'Escape' || key === 'Backspace' || keyCode === 8 || keyCode === 27;
+
+      if (isUp || isDown || isLeft || isRight || isEnter) {
+        e.preventDefault();
+      }
+
       if (activeZone === 'HERO') {
-        if (e.key === 'ArrowRight') updateHeroBtnFocus(1);
-        if (e.key === 'ArrowLeft') updateHeroBtnFocus(0);
-        if (e.key === 'ArrowDown') {
+        if (isRight) updateHeroBtnFocus(1);
+        if (isLeft) updateHeroBtnFocus(0);
+        if (isDown) {
           heroBtns[currentHeroBtnIndex].classList.remove('focused');
           activeZone = 'GRID';
           updateCardFocus(currentCardIndex);
         }
-        if (e.key === 'Enter') {
+        if (isEnter) {
           if (currentHeroBtnIndex === 0) {
             startPlayback(featuredVideoUrl);
           } else {
@@ -383,4 +397,64 @@
         }
       }
       else if (activeZone === 'GRID') {
-        if (e.key === 'ArrowRight') updateCardFocus(currentCardIndex + 1);
+        if (isRight) updateCardFocus(currentCardIndex + 1);
+        if (isLeft) updateCardFocus(currentCardIndex - 1);
+        if (isUp) {
+          cards[currentCardIndex].classList.remove('focused');
+          activeZone = 'HERO';
+          updateHeroBtnFocus(currentHeroBtnIndex);
+        }
+        if (isEnter) {
+          const card = cards[currentCardIndex];
+          openDetails(
+            card.getAttribute('data-title'),
+            card.getAttribute('data-desc'),
+            card.getAttribute('data-video')
+          );
+        }
+      } 
+      else if (activeZone === 'DETAILS') {
+        if (isDown) updateDetailBtnFocus(1);
+        if (isUp) updateDetailBtnFocus(0);
+        if (isBack) closeDetails();
+        if (isEnter) {
+          if (currentDetailBtnIndex === 0) startPlayback(selectedVideoUrl);
+          if (currentDetailBtnIndex === 1) closeDetails();
+        }
+      } 
+      else if (activeZone === 'PLAYER') {
+        if (!playerControls.classList.contains('visible')) {
+          showPlayerControls();
+          return;
+        }
+
+        showPlayerControls();
+
+        if (isDown && currentPlayerBtnIndex === 0) updatePlayerBtnFocus(2);
+        if (isUp && currentPlayerBtnIndex > 0) updatePlayerBtnFocus(0);
+        if (isRight && currentPlayerBtnIndex > 0 && currentPlayerBtnIndex < 3) updatePlayerBtnFocus(currentPlayerBtnIndex + 1);
+        if (isLeft && currentPlayerBtnIndex > 1) updatePlayerBtnFocus(currentPlayerBtnIndex - 1);
+
+        if (isBack) {
+          stopPlayback();
+        }
+
+        if (isEnter) {
+          if (currentPlayerBtnIndex === 0) stopPlayback();
+          if (currentPlayerBtnIndex === 1) videoPlayer.currentTime -= 10;
+          if (currentPlayerBtnIndex === 2) {
+            if (videoPlayer.paused) {
+              videoPlayer.play();
+              document.getElementById('pBtnPlayPause').innerText = '❚❚ Pause';
+            } else {
+              videoPlayer.pause();
+              document.getElementById('pBtnPlayPause').innerText = '► Play';
+            }
+          }
+          if (currentPlayerBtnIndex === 3) videoPlayer.currentTime += 10;
+        }
+      }
+    });
+  </script>
+</body>
+</html>
