@@ -2,61 +2,155 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>TV Streaming Dashboard</title>
+  <title>Personal TV Dashboard</title>
   <style>
-    body { background-color: #141414; color: #fff; font-family: sans-serif; margin: 20px; }
+    body { background-color: #141414; color: #fff; font-family: sans-serif; margin: 0; padding: 20px; overflow: hidden; }
     h2 { margin-left: 10px; }
-    .grid { display: flex; gap: 15px; overflow-x: hidden; padding: 10px; }
+    .grid { display: flex; gap: 15px; padding: 10px; }
     .card {
       width: 180px; height: 260px; background-color: #333; border-radius: 8px;
-      display: flex; align-items: center; justify-content: center;
       border: 4px solid transparent; transition: transform 0.2s, border-color 0.2s;
+      overflow: hidden; cursor: pointer;
     }
-    /* Highlight state for TV Remote selection */
-    .card.focused {
-      border-color: #e50914;
-      transform: scale(1.08);
-      outline: none;
+    .card.focused { border-color: #e50914; transform: scale(1.08); outline: none; }
+
+    /* Netflix-style Details Sidebar Overlay */
+    .details-overlay {
+      position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+      background: linear-gradient(to right, rgba(0,0,0,0.9) 35%, rgba(0,0,0,0.4) 100%);
+      display: none; flex-direction: column; justify-content: center;
+      padding-left: 50px; box-sizing: border-box; z-index: 10;
     }
+    .details-content { max-width: 400px; }
+    .details-title { font-size: 2.5rem; margin-bottom: 10px; }
+    .details-description { font-size: 1rem; color: #ccc; margin-bottom: 20px; line-height: 1.4; }
+    
+    .action-btn {
+      display: block; width: 200px; padding: 12px 20px; margin-bottom: 10px;
+      background-color: #333; color: white; border: 2px solid transparent;
+      border-radius: 4px; font-size: 1.1rem; font-weight: bold; text-align: center;
+    }
+    .action-btn.focused { border-color: #e50914; background-color: #e50914; outline: none; }
+
+    /* Fullscreen In-Page Player */
+    .player-overlay {
+      position: fixed; top: 0; left: 0; width: 100vw; height: 100vh;
+      background-color: #000; display: none; z-index: 20;
+    }
+    video { width: 100%; height: 100%; }
   </style>
 </head>
 <body>
 
-  <h2>Movies</h2>
+  <h2>Trending Shows</h2>
   <div class="grid" id="movieGrid">
-    <div class="card focused" tabindex="0" data-video="https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4">Movie 1</div>
-    <div class="card" tabindex="0" data-video="https://dn710702.ca.archive.org/0/items/terminator-2-judgment-day-1991-blu-ray-v-2-720p-fzmovies.net-4beb-52c-21b-25a-27018a-52684ae-967a-6d/Terminator_2__Judgment_Day_(1991)_BluRay%20v2_720p_(fzmovies.net)_4beb52c21b25a27018a52684ae967a6d.mp4">
-  <img src="https://i.ebayimg.com/thumbs/images/g/XT8AAOSwDaBcM3jf/s-l500.jpg" alt="Terminator 2" style="width: 100%; height: 100%; object-fit: cover; border-radius: 4px;">
-</div>
-    <div class="card" tabindex="0" data-video="https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerBlazes.mp4">Movie 3</div>
+    <div class="card focused" tabindex="0" 
+         data-title="Big Buck Bunny" 
+         data-desc="A giant rabbit with a heart of gold deals with forest bullies."
+         data-video="https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4">
+      <img src="https://upload.wikimedia.org/wikipedia/commons/c/c5/Big_buck_bunny_poster_big.bjp.jpg" style="width:100%; height:100%; object-fit:cover;">
+    </div>
+    
+    <div class="card" tabindex="0" 
+         data-title="Elephant's Dream" 
+         data-desc="Two friends explore a strange machine-driven world."
+         data-video="https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ElephantsDream.mp4">
+      <img src="https://upload.wikimedia.org/wikipedia/commons/e/e8/Elephants_Dream_poster.jpg" style="width:100%; height:100%; object-fit:cover;">
+    </div>
+  </div>
+
+  <!-- Left Sidebar Details Screen -->
+  <div class="details-overlay" id="detailsScreen">
+    <div class="details-content">
+      <h1 class="details-title" id="showTitle">Movie Title</h1>
+      <p class="details-description" id="showDesc">Movie description goes here.</p>
+      <div class="action-btn focused" id="btnPlay" tabindex="0">► Play</div>
+      <div class="action-btn" id="btnBack" tabindex="0">Back</div>
+    </div>
+  </div>
+
+  <!-- In-Site Fullscreen Player -->
+  <div class="player-overlay" id="playerScreen">
+    <video id="videoPlayer" controls autoplay></video>
   </div>
 
   <script>
     const cards = Array.from(document.querySelectorAll('.card'));
-    let currentIndex = 0;
+    const detailsScreen = document.getElementById('detailsScreen');
+    const playerScreen = document.getElementById('playerScreen');
+    const videoPlayer = document.getElementById('videoPlayer');
+    const actionBtns = [document.getElementById('btnPlay'), document.getElementById('btnBack')];
 
-    function updateFocus(newIndex) {
+    let currentCardIndex = 0;
+    let currentBtnIndex = 0;
+    let activeMode = 'GRID'; // 'GRID', 'DETAILS', or 'PLAYER'
+    let selectedVideoUrl = '';
+
+    function updateCardFocus(newIndex) {
       if (newIndex >= 0 && newIndex < cards.length) {
-        cards[currentIndex].classList.remove('focused');
-        currentIndex = newIndex;
-        cards[currentIndex].classList.add('focused');
-        cards[currentIndex].scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'center' });
+        cards[currentCardIndex].classList.remove('focused');
+        currentCardIndex = newIndex;
+        cards[currentCardIndex].classList.add('focused');
       }
     }
 
-    // Handle TV Remote Button Presses
+    function updateBtnFocus(newIndex) {
+      if (newIndex >= 0 && newIndex < actionBtns.length) {
+        actionBtns[currentBtnIndex].classList.remove('focused');
+        currentBtnIndex = newIndex;
+        actionBtns[currentBtnIndex].classList.add('focused');
+      }
+    }
+
+    function openDetails() {
+      const card = cards[currentCardIndex];
+      document.getElementById('showTitle').innerText = card.getAttribute('data-title');
+      document.getElementById('showDesc').innerText = card.getAttribute('data-desc');
+      selectedVideoUrl = card.getAttribute('data-video');
+      
+      activeMode = 'DETAILS';
+      detailsScreen.style.display = 'flex';
+      updateBtnFocus(0);
+    }
+
+    function closeDetails() {
+      activeMode = 'GRID';
+      detailsScreen.style.display = 'none';
+    }
+
+    function startPlayback() {
+      activeMode = 'PLAYER';
+      playerScreen.style.display = 'block';
+      videoPlayer.src = selectedVideoUrl;
+      videoPlayer.play();
+    }
+
+    function stopPlayback() {
+      videoPlayer.pause();
+      videoPlayer.src = '';
+      playerScreen.style.display = 'none';
+      activeMode = 'DETAILS';
+    }
+
+    // Navigation Key handling for Smart TV Remotes
     document.addEventListener('keydown', (e) => {
-      switch (e.key) {
-        case 'ArrowRight':
-          updateFocus(currentIndex + 1);
-          break;
-        case 'ArrowLeft':
-          updateFocus(currentIndex - 1);
-          break;
-        case 'Enter':
-          const videoUrl = cards[currentIndex].getAttribute('data-video');
-          window.location.href = videoUrl; // Open/play video link
-          break;
+      if (activeMode === 'GRID') {
+        if (e.key === 'ArrowRight') updateCardFocus(currentCardIndex + 1);
+        if (e.key === 'ArrowLeft') updateCardFocus(currentCardIndex - 1);
+        if (e.key === 'Enter') openDetails();
+      } 
+      else if (activeMode === 'DETAILS') {
+        if (e.key === 'ArrowDown') updateBtnFocus(1);
+        if (e.key === 'ArrowUp') updateBtnFocus(0);
+        if (e.key === 'Escape' || e.key === 'Backspace') closeDetails();
+        if (e.key === 'Enter') {
+          if (currentBtnIndex === 0) startPlayback();
+          if (currentBtnIndex === 1) closeDetails();
+        }
+      } 
+      else if (activeMode === 'PLAYER') {
+        // Press Back or Escape on TV remote to stop video and return to details
+        if (e.key === 'Escape' || e.key === 'Backspace') stopPlayback();
       }
     });
   </script>
