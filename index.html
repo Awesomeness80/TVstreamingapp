@@ -13,25 +13,34 @@
       overflow-x: hidden; 
     }
 
-    /* Hero Banner Section at Top */
+    /* Netflix Hero Banner (Wide Cinematic Thumbnail) */
     .hero-banner {
       position: relative;
       width: 100%;
-      height: 60vh;
-      background: linear-gradient(to top, #141414 10%, transparent 60%),
-                  linear-gradient(to right, rgba(0,0,0,0.85) 35%, transparent 70%),
-                  url('https://upload.wikimedia.org/wikipedia/commons/c/c5/Big_buck_bunny_poster_big.bjp.jpg') no-repeat center top / cover;
+      height: 65vh; /* Large top banner area */
+      /* Background image setup for wide 16:9 cinematic look */
+      background: linear-gradient(to top, #141414 5%, rgba(20,20,20,0.4) 50%, transparent 100%),
+                  linear-gradient(to right, rgba(0,0,0,0.9) 30%, rgba(0,0,0,0.2) 70%),
+                  url('https://upload.wikimedia.org/wikipedia/commons/c/c5/Big_buck_bunny_poster_big.bjp.jpg') no-repeat center center / cover;
       display: flex;
       flex-direction: column;
       justify-content: center;
       padding-left: 50px;
       box-sizing: border-box;
+      border: 4px solid transparent;
+      transition: border-color 0.2s;
+    }
+
+    /* Focused state for Hero Banner when using TV Remote */
+    .hero-banner.focused {
+      border-color: #e50914;
+      outline: none;
     }
     
     .hero-title {
-      font-size: 3.2rem;
+      font-size: 3.5rem;
       margin: 0 0 10px 0;
-      text-shadow: 2px 2px 8px rgba(0,0,0,0.8);
+      text-shadow: 2px 2px 8px rgba(0,0,0,0.9);
     }
 
     .hero-desc {
@@ -40,7 +49,7 @@
       max-width: 500px;
       margin-bottom: 25px;
       line-height: 1.4;
-      text-shadow: 1px 1px 4px rgba(0,0,0,0.8);
+      text-shadow: 1px 1px 4px rgba(0,0,0,0.9);
     }
 
     .hero-buttons {
@@ -65,7 +74,6 @@
       color: #000;
     }
 
-    /* Focused State for TV Remote */
     .hero-btn.focused {
       border-color: #e50914;
       transform: scale(1.08);
@@ -75,7 +83,7 @@
 
     /* Main Grid Area Below Hero */
     .content-section {
-      margin-top: -30px;
+      margin-top: -20px;
       position: relative;
       z-index: 2;
     }
@@ -86,7 +94,7 @@
       margin-bottom: 10px;
     }
 
-    /* Scrollable Row Styling */
+    /* Scrollable Row Styling for Normal Vertical Posters */
     .grid { 
       display: flex; 
       gap: 15px; 
@@ -99,11 +107,11 @@
       display: none; 
     }
 
-    /* Fixed-size Cards */
+    /* Normal Vertical Poster Cards */
     .card {
       min-width: 180px; 
       width: 180px; 
-      height: 260px; 
+      height: 260px; /* Normal portrait height */
       background-color: #333; 
       border-radius: 8px;
       border: 4px solid transparent; 
@@ -135,318 +143,4 @@
       background-color: #333; color: white; border: 2px solid transparent;
       border-radius: 4px; font-size: 1.1rem; font-weight: bold; text-align: center;
     }
-    .action-btn.focused { border-color: #e50914; background-color: #e50914; outline: none; }
-
-    /* Fullscreen In-Page Player */
-    .player-overlay {
-      position: fixed; top: 0; left: 0; width: 100vw; height: 100vh;
-      background-color: #000; display: none; z-index: 20;
-    }
-    video { width: 100%; height: 100%; object-fit: contain; }
-
-    /* Video Player Controls */
-    .player-controls {
-      position: absolute; bottom: 0; left: 0; right: 0; top: 0;
-      background: linear-gradient(to top, rgba(0,0,0,0.85) 0%, transparent 40%, rgba(0,0,0,0.6) 100%);
-      display: flex; flex-direction: column; justify-content: space-between;
-      padding: 30px 50px; box-sizing: border-box; opacity: 0; transition: opacity 0.3s;
-      z-index: 25; pointer-events: none;
-    }
-    .player-controls.visible { opacity: 1; pointer-events: auto; }
-
-    .top-controls { display: flex; justify-content: flex-start; }
-    .control-btn {
-      background-color: rgba(40, 40, 40, 0.8); color: white; border: 2px solid transparent;
-      padding: 10px 20px; border-radius: 4px; font-size: 1rem; font-weight: bold;
-      cursor: pointer; margin-right: 10px;
-    }
-    .control-btn.focused { border-color: #e50914; background-color: #e50914; }
-
-    .bottom-controls { display: flex; flex-direction: column; gap: 15px; }
-    
-    .progress-container {
-      width: 100%; height: 8px; background-color: rgba(255, 255, 255, 0.3);
-      border-radius: 4px; overflow: hidden; position: relative;
-    }
-    .progress-bar { width: 0%; height: 100%; background-color: #e50914; transition: width 0.2s linear; }
-
-    .control-buttons-row { display: flex; align-items: center; gap: 15px; }
-  </style>
-</head>
-<body>
-
-  <!-- Netflix Hero Player Banner at Top -->
-  <div class="hero-banner" id="heroBanner">
-    <h1 class="hero-title" id="heroTitle">Big Buck Bunny</h1>
-    <p class="hero-desc" id="heroDesc">A giant rabbit with a heart of gold deals with forest bullies in this featured classic adventure.</p>
-    <div class="hero-buttons">
-      <div class="hero-btn hero-btn-play focused" id="heroBtnPlay" tabindex="0">► Play</div>
-      <div class="hero-btn" id="heroBtnInfo" tabindex="0">ⓘ More Info</div>
-    </div>
-  </div>
-
-  <!-- Content Row Below Hero Banner -->
-  <div class="content-section">
-    <h2>Trending Now</h2>
-    <div class="grid" id="movieGrid">
-      <div class="card" tabindex="0" 
-           data-title="Big Buck Bunny" 
-           data-desc="A giant rabbit with a heart of gold deals with forest bullies."
-           data-video="https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4">
-        <img src="https://upload.wikimedia.org/wikipedia/commons/c/c5/Big_buck_bunny_poster_big.bjp.jpg" style="width:100%; height:100%; object-fit:cover;">
-      </div>
-      
-      <div class="card" tabindex="0" 
-           data-title="Elephant's Dream" 
-           data-desc="Two friends explore a strange machine-driven world."
-           data-video="https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ElephantsDream.mp4">
-        <img src="https://upload.wikimedia.org/wikipedia/commons/e/e8/Elephants_Dream_poster.jpg" style="width:100%; height:100%; object-fit:cover;">
-      </div>
-
-      <!-- PASTE YOUR EXTRA MOVIE CARDS HERE -->
-
-    </div>
-  </div>
-
-  <!-- Left Sidebar Details Screen -->
-  <div class="details-overlay" id="detailsScreen">
-    <div class="details-content">
-      <h1 class="details-title" id="showTitle">Movie Title</h1>
-      <p class="details-description" id="showDesc">Movie description goes here.</p>
-      <div class="action-btn focused" id="btnPlay" tabindex="0">► Play</div>
-      <div class="action-btn" id="btnBack" tabindex="0">Back</div>
-    </div>
-  </div>
-
-  <!-- In-Site Fullscreen Player -->
-  <div class="player-overlay" id="playerScreen">
-    <video id="videoPlayer"></video>
-    
-    <!-- Player Overlay Controls -->
-    <div class="player-controls" id="playerControls">
-      <div class="top-controls">
-        <div class="control-btn focused" id="pBtnHome">← Home Screen</div>
-      </div>
-      
-      <div class="bottom-controls">
-        <div class="progress-container">
-          <div class="progress-bar" id="progressBar"></div>
-        </div>
-        <div class="control-buttons-row">
-          <div class="control-btn" id="pBtnRw">« 10s</div>
-          <div class="control-btn" id="pBtnPlayPause">❚❚ Pause</div>
-          <div class="control-btn" id="pBtnFf">10s »</div>
-        </div>
-      </div>
-    </div>
-  </div>
-
-  <script>
-    const cards = Array.from(document.querySelectorAll('.card'));
-    const heroBtns = [document.getElementById('heroBtnPlay'), document.getElementById('heroBtnInfo')];
-    const detailsScreen = document.getElementById('detailsScreen');
-    const playerScreen = document.getElementById('playerScreen');
-    const playerControls = document.getElementById('playerControls');
-    const videoPlayer = document.getElementById('videoPlayer');
-    const progressBar = document.getElementById('progressBar');
-
-    const detailBtns = [document.getElementById('btnPlay'), document.getElementById('btnBack')];
-    const playerBtns = [
-      document.getElementById('pBtnHome'),
-      document.getElementById('pBtnRw'),
-      document.getElementById('pBtnPlayPause'),
-      document.getElementById('pBtnFf')
-    ];
-
-    let activeZone = 'HERO'; // 'HERO', 'GRID', 'DETAILS', or 'PLAYER'
-    let currentHeroBtnIndex = 0;
-    let currentCardIndex = 0;
-    let currentDetailBtnIndex = 0;
-    let currentPlayerBtnIndex = 0;
-    
-    // Default featured video for hero banner
-    let featuredVideoUrl = "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4";
-    let selectedVideoUrl = "";
-    let controlsTimeout = null;
-
-    function updateHeroBtnFocus(newIndex) {
-      if (newIndex >= 0 && newIndex < heroBtns.length) {
-        heroBtns[currentHeroBtnIndex].classList.remove('focused');
-        currentHeroBtnIndex = newIndex;
-        heroBtns[currentHeroBtnIndex].classList.add('focused');
-      }
-    }
-
-    function updateCardFocus(newIndex) {
-      if (newIndex >= 0 && newIndex < cards.length) {
-        cards[currentCardIndex].classList.remove('focused');
-        currentCardIndex = newIndex;
-        cards[currentCardIndex].classList.add('focused');
-        
-        cards[currentCardIndex].scrollIntoView({ 
-          behavior: 'smooth', 
-          block: 'nearest', 
-          inline: 'center' 
-        });
-      }
-    }
-
-    function updateDetailBtnFocus(newIndex) {
-      if (newIndex >= 0 && newIndex < detailBtns.length) {
-        detailBtns[currentDetailBtnIndex].classList.remove('focused');
-        currentDetailBtnIndex = newIndex;
-        detailBtns[currentDetailBtnIndex].classList.add('focused');
-      }
-    }
-
-    function updatePlayerBtnFocus(newIndex) {
-      if (newIndex >= 0 && newIndex < playerBtns.length) {
-        playerBtns[currentPlayerBtnIndex].classList.remove('focused');
-        currentPlayerBtnIndex = newIndex;
-        playerBtns[currentPlayerBtnIndex].classList.add('focused');
-      }
-    }
-
-    function showPlayerControls() {
-      playerControls.classList.add('visible');
-      clearTimeout(controlsTimeout);
-      controlsTimeout = setTimeout(() => {
-        playerControls.classList.remove('visible');
-      }, 4000);
-    }
-
-    function openDetails(title, desc, videoUrl) {
-      document.getElementById('showTitle').innerText = title;
-      document.getElementById('showDesc').innerText = desc;
-      selectedVideoUrl = videoUrl;
-      
-      activeZone = 'DETAILS';
-      detailsScreen.style.display = 'flex';
-      updateDetailBtnFocus(0);
-    }
-
-    function closeDetails() {
-      activeZone = 'GRID';
-      detailsScreen.style.display = 'none';
-    }
-
-    function startPlayback(url) {
-      activeZone = 'PLAYER';
-      playerScreen.style.display = 'block';
-      videoPlayer.src = url;
-      videoPlayer.play();
-      updatePlayerBtnFocus(0);
-      showPlayerControls();
-    }
-
-    function stopPlayback() {
-      videoPlayer.pause();
-      videoPlayer.src = '';
-      playerScreen.style.display = 'none';
-      detailsScreen.style.display = 'none';
-      activeZone = 'GRID';
-      clearTimeout(controlsTimeout);
-    }
-
-    // Video Progress Bar update
-    videoPlayer.addEventListener('timeupdate', () => {
-      if (videoPlayer.duration) {
-        const percent = (videoPlayer.currentTime / videoPlayer.duration) * 100;
-        progressBar.style.width = percent + '%';
-      }
-    });
-
-    // Smart TV Remote Key Handling
-    document.addEventListener('keydown', (e) => {
-      if (activeZone === 'HERO') {
-        if (e.key === 'ArrowRight') updateHeroBtnFocus(1);
-        if (e.key === 'ArrowLeft') updateHeroBtnFocus(0);
-        if (e.key === 'ArrowDown') {
-          // Switch focus down to the movie row
-          heroBtns[currentHeroBtnIndex].classList.remove('focused');
-          activeZone = 'GRID';
-          updateCardFocus(currentCardIndex);
-        }
-        if (e.key === 'Enter') {
-          if (currentHeroBtnIndex === 0) {
-            startPlayback(featuredVideoUrl);
-          } else {
-            openDetails(
-              document.getElementById('heroTitle').innerText, 
-              document.getElementById('heroDesc').innerText, 
-              featuredVideoUrl
-            );
-          }
-        }
-      }
-      else if (activeZone === 'GRID') {
-        if (e.key === 'ArrowRight') updateCardFocus(currentCardIndex + 1);
-        if (e.key === 'ArrowLeft') updateCardFocus(currentCardIndex - 1);
-        if (e.key === 'ArrowUp') {
-          // Switch focus up to the Hero Banner
-          cards[currentCardIndex].classList.remove('focused');
-          activeZone = 'HERO';
-          updateHeroBtnFocus(currentHeroBtnIndex);
-        }
-        if (e.key === 'Enter') {
-          const card = cards[currentCardIndex];
-          openDetails(
-            card.getAttribute('data-title'),
-            card.getAttribute('data-desc'),
-            card.getAttribute('data-video')
-          );
-        }
-      } 
-      else if (activeZone === 'DETAILS') {
-        if (e.key === 'ArrowDown') updateDetailBtnFocus(1);
-        if (e.key === 'ArrowUp') updateDetailBtnFocus(0);
-        if (e.key === 'Escape' || e.key === 'Backspace') closeDetails();
-        if (e.key === 'Enter') {
-          if (currentDetailBtnIndex === 0) startPlayback(selectedVideoUrl);
-          if (currentDetailBtnIndex === 1) closeDetails();
-        }
-      } 
-      else if (activeZone === 'PLAYER') {
-        if (!playerControls.classList.contains('visible')) {
-          showPlayerControls();
-          return;
-        }
-
-        showPlayerControls();
-
-        if (e.key === 'ArrowDown') {
-          if (currentPlayerBtnIndex === 0) updatePlayerBtnFocus(2);
-        }
-        if (e.key === 'ArrowUp') {
-          if (currentPlayerBtnIndex > 0) updatePlayerBtnFocus(0);
-        }
-        if (e.key === 'ArrowRight') {
-          if (currentPlayerBtnIndex > 0 && currentPlayerBtnIndex < 3) updatePlayerBtnFocus(currentPlayerBtnIndex + 1);
-        }
-        if (e.key === 'ArrowLeft') {
-          if (currentPlayerBtnIndex > 1) updatePlayerBtnFocus(currentPlayerBtnIndex - 1);
-        }
-
-        if (e.key === 'Escape' || e.key === 'Backspace') {
-          stopPlayback();
-        }
-
-        if (e.key === 'Enter') {
-          if (currentPlayerBtnIndex === 0) stopPlayback();
-          if (currentPlayerBtnIndex === 1) videoPlayer.currentTime -= 10;
-          if (currentPlayerBtnIndex === 2) {
-            if (videoPlayer.paused) {
-              videoPlayer.play();
-              document.getElementById('pBtnPlayPause').innerText = '❚❚ Pause';
-            } else {
-              videoPlayer.pause();
-              document.getElementById('pBtnPlayPause').innerText = '► Play';
-            }
-          }
-          if (currentPlayerBtnIndex === 3) videoPlayer.currentTime += 10;
-        }
-      }
-    });
-  </script>
-</body>
-</html>
+    .action-btn.focused { border-color: #e50914
