@@ -13,14 +13,14 @@
       overflow-x: hidden; 
     }
 
-    /* Netflix Hero Banner (Wide Cinematic Backdrop) */
+    /* Netflix Hero Banner */
     .hero-banner {
       position: relative;
       width: 100%;
-      height: 65vh;
+      height: 60vh;
       background: linear-gradient(to top, #141414 5%, rgba(20,20,20,0.4) 50%, transparent 100%),
                   linear-gradient(to right, rgba(0,0,0,0.9) 30%, rgba(0,0,0,0.2) 70%),
-                  url('https://www.bostonherald.com/wp-content/uploads/2026/06/BHR-Z-TOY-01.jpg?w=1569') no-repeat center center / cover;
+                  url('https://upload.wikimedia.org/wikipedia/commons/c/c5/Big_buck_bunny_poster_big.bjp.jpg') no-repeat center center / cover;
       display: flex;
       flex-direction: column;
       justify-content: center;
@@ -30,11 +30,6 @@
       transition: border-color 0.2s;
     }
 
-    .hero-banner.focused {
-      border-color: #e50914;
-      outline: none;
-    }
-    
     .hero-title {
       font-size: 3.5rem;
       margin: 0 0 10px 0;
@@ -67,10 +62,7 @@
       transition: all 0.2s;
     }
 
-    .hero-btn-play {
-      background-color: #fff;
-      color: #000;
-    }
+    .hero-btn-play { background-color: #fff; color: #000; }
 
     .hero-btn.focused {
       border-color: #e50914;
@@ -79,33 +71,32 @@
       box-shadow: 0 0 15px rgba(229, 9, 20, 0.8);
     }
 
-    /* Main Grid Area Below Hero */
+    /* Main Rows Section */
     .content-section {
       margin-top: -20px;
       position: relative;
       z-index: 2;
     }
 
-    h2 { 
+    .row-title { 
       margin-left: 50px; 
       font-size: 1.4rem;
+      margin-top: 20px;
       margin-bottom: 10px;
     }
 
-    /* Scrollable Row Styling for Normal Vertical Posters */
+    /* Scrollable Row Styling */
     .grid { 
       display: flex; 
       gap: 15px; 
-      padding: 10px 50px 30px 50px; 
+      padding: 10px 50px 20px 50px; 
       overflow-x: auto; 
       scroll-behavior: smooth;
       scrollbar-width: none; 
     }
-    .grid::-webkit-scrollbar {
-      display: none; 
-    }
+    .grid::-webkit-scrollbar { display: none; }
 
-    /* Normal Vertical Poster Cards */
+    /* Vertical Poster Cards */
     .card {
       min-width: 180px; 
       width: 180px; 
@@ -169,22 +160,19 @@
     .control-btn.focused { border-color: #e50914; background-color: #e50914; }
 
     .bottom-controls { display: flex; flex-direction: column; gap: 15px; }
-    
-    /* Netflix Red Progress Bar */
     .progress-container {
       width: 100%; height: 8px; background-color: rgba(255, 255, 255, 0.3);
       border-radius: 4px; overflow: hidden; position: relative;
     }
     .progress-bar { width: 0%; height: 100%; background-color: #e50914; transition: width 0.2s linear; }
-
     .control-buttons-row { display: flex; align-items: center; gap: 15px; }
   </style>
 </head>
 <body>
 
-  <!-- Netflix Wide Hero Player Banner at Top -->
+  <!-- Netflix Hero Player Banner -->
   <div class="hero-banner" id="heroBanner">
-    <h1 class="hero-title" id="heroTitle">Toy Story 5</h1>
+    <h1 class="hero-title" id="heroTitle">Big Buck Bunny</h1>
     <p class="hero-desc" id="heroDesc">A giant rabbit with a heart of gold deals with forest bullies in this featured classic adventure.</p>
     <div class="hero-buttons">
       <div class="hero-btn hero-btn-play focused" id="heroBtnPlay" tabindex="0">► Play</div>
@@ -192,27 +180,41 @@
     </div>
   </div>
 
-  <!-- Content Row Below Hero Banner -->
-  <div class="content-section">
-    <h2>Trending Now</h2>
-    <div class="grid" id="movieGrid">
-      <div class="card" tabindex="0" 
-           data-title="Big Buck Bunny" 
-           data-desc="A giant rabbit with a heart of gold deals with forest bullies."
-           data-video="https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4">
+  <!-- Content Section with 10 Rows -->
+  <div class="content-section" id="rowsContainer">
+    
+    <!-- Row 1 -->
+    <h2 class="row-title">Row 1: Trending Now</h2>
+    <div class="grid">
+      <div class="card" tabindex="0" data-title="Big Buck Bunny" data-desc="Description 1" data-video="https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4">
         <img src="https://upload.wikimedia.org/wikipedia/commons/c/c5/Big_buck_bunny_poster_big.bjp.jpg" style="width:100%; height:100%; object-fit:cover;">
       </div>
-      
-      <div class="card" tabindex="0" 
-           data-title="Elephant's Dream" 
-           data-desc="Two friends explore a strange machine-driven world."
-           data-video="https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ElephantsDream.mp4">
+      <div class="card" tabindex="0" data-title="Elephant's Dream" data-desc="Description 2" data-video="https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ElephantsDream.mp4">
         <img src="https://upload.wikimedia.org/wikipedia/commons/e/e8/Elephants_Dream_poster.jpg" style="width:100%; height:100%; object-fit:cover;">
       </div>
-
-      <!-- PASTE YOUR EXTRA MOVIE CARDS HERE -->
-
+      <!-- Add 8 more movie cards here to reach 10 in Row 1 -->
     </div>
+
+    <!-- Row 2 -->
+    <h2 class="row-title">Row 2: Action Movies</h2>
+    <div class="grid">
+      <div class="card" tabindex="0" data-title="Action Movie 1" data-desc="Action Desc 1" data-video="https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerBlazes.mp4">
+        <img src="https://upload.wikimedia.org/wikipedia/commons/c/c5/Big_buck_bunny_poster_big.bjp.jpg" style="width:100%; height:100%; object-fit:cover;">
+      </div>
+      <!-- Add 9 more movie cards here -->
+    </div>
+
+    <!-- Row 3 -->
+    <h2 class="row-title">Row 3: Comedies</h2>
+    <div class="grid">
+      <div class="card" tabindex="0" data-title="Comedy Movie 1" data-desc="Comedy Desc 1" data-video="https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerEscapes.mp4">
+        <img src="https://upload.wikimedia.org/wikipedia/commons/e/e8/Elephants_Dream_poster.jpg" style="width:100%; height:100%; object-fit:cover;">
+      </div>
+      <!-- Add 9 more movie cards here -->
+    </div>
+
+    <!-- Duplicate the row structure above to create Rows 4 through 10 -->
+
   </div>
 
   <!-- Left Sidebar Details Screen -->
@@ -228,17 +230,12 @@
   <!-- In-Site Fullscreen Player -->
   <div class="player-overlay" id="playerScreen">
     <video id="videoPlayer"></video>
-    
-    <!-- Player Overlay Controls -->
     <div class="player-controls" id="playerControls">
       <div class="top-controls">
         <div class="control-btn focused" id="pBtnHome">← Home Screen</div>
       </div>
-      
       <div class="bottom-controls">
-        <div class="progress-container">
-          <div class="progress-bar" id="progressBar"></div>
-        </div>
+        <div class="progress-container"><div class="progress-bar" id="progressBar"></div></div>
         <div class="control-buttons-row">
           <div class="control-btn" id="pBtnRw">« 10s</div>
           <div class="control-btn" id="pBtnPlayPause">❚❚ Pause</div>
@@ -249,7 +246,8 @@
   </div>
 
   <script>
-    const cards = Array.from(document.querySelectorAll('.card'));
+    // Get all rows dynamically
+    const rows = Array.from(document.querySelectorAll('.grid'));
     const heroBtns = [document.getElementById('heroBtnPlay'), document.getElementById('heroBtnInfo')];
     const detailsScreen = document.getElementById('detailsScreen');
     const playerScreen = document.getElementById('playerScreen');
@@ -265,8 +263,9 @@
       document.getElementById('pBtnFf')
     ];
 
-    let activeZone = 'HERO'; // 'HERO', 'GRID', 'DETAILS', or 'PLAYER'
+    let activeZone = 'HERO'; // 'HERO', 'GRID', 'DETAILS', 'PLAYER'
     let currentHeroBtnIndex = 0;
+    let currentRowIndex = 0;
     let currentCardIndex = 0;
     let currentDetailBtnIndex = 0;
     let currentPlayerBtnIndex = 0;
@@ -274,6 +273,10 @@
     let featuredVideoUrl = "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4";
     let selectedVideoUrl = "";
     let controlsTimeout = null;
+
+    function getCardsInCurrentRow() {
+      return Array.from(rows[currentRowIndex].querySelectorAll('.card'));
+    }
 
     function updateHeroBtnFocus(newIndex) {
       if (newIndex >= 0 && newIndex < heroBtns.length) {
@@ -283,17 +286,28 @@
       }
     }
 
-    function updateCardFocus(newIndex) {
-      if (newIndex >= 0 && newIndex < cards.length) {
-        cards[currentCardIndex].classList.remove('focused');
-        currentCardIndex = newIndex;
-        cards[currentCardIndex].classList.add('focused');
-        
-        cards[currentCardIndex].scrollIntoView({ 
-          behavior: 'smooth', 
-          block: 'nearest', 
-          inline: 'center' 
-        });
+    function updateCardFocus(newRowIndex, newCardIndex) {
+      const currentCards = getCardsInCurrentRow();
+      
+      // Remove focus from current card
+      if (currentCards[currentCardIndex]) {
+        currentCards[currentCardIndex].classList.remove('focused');
+      }
+
+      currentRowIndex = newRowIndex;
+      const targetRowCards = getCardsInCurrentRow();
+
+      // Ensure card index stays within bounds of the new row
+      if (newCardIndex >= targetRowCards.length) {
+        currentCardIndex = targetRowCards.length - 1;
+      } else {
+        currentCardIndex = Math.max(0, newCardIndex);
+      }
+
+      const activeCard = targetRowCards[currentCardIndex];
+      if (activeCard) {
+        activeCard.classList.add('focused');
+        activeCard.scrollIntoView({ behavior: 'smooth', block: 'center', inline: 'center' });
       }
     }
 
@@ -316,16 +330,13 @@
     function showPlayerControls() {
       playerControls.classList.add('visible');
       clearTimeout(controlsTimeout);
-      controlsTimeout = setTimeout(() => {
-        playerControls.classList.remove('visible');
-      }, 4000);
+      controlsTimeout = setTimeout(() => { playerControls.classList.remove('visible'); }, 4000);
     }
 
     function openDetails(title, desc, videoUrl) {
       document.getElementById('showTitle').innerText = title;
       document.getElementById('showDesc').innerText = desc;
       selectedVideoUrl = videoUrl;
-      
       activeZone = 'DETAILS';
       detailsScreen.style.display = 'flex';
       updateDetailBtnFocus(0);
@@ -382,35 +393,40 @@
         if (isDown) {
           heroBtns[currentHeroBtnIndex].classList.remove('focused');
           activeZone = 'GRID';
-          updateCardFocus(currentCardIndex);
+          updateCardFocus(0, 0);
         }
         if (isEnter) {
-          if (currentHeroBtnIndex === 0) {
-            startPlayback(featuredVideoUrl);
-          } else {
-            openDetails(
-              document.getElementById('heroTitle').innerText, 
-              document.getElementById('heroDesc').innerText, 
-              featuredVideoUrl
-            );
-          }
+          if (currentHeroBtnIndex === 0) startPlayback(featuredVideoUrl);
+          else openDetails(document.getElementById('heroTitle').innerText, document.getElementById('heroDesc').innerText, featuredVideoUrl);
         }
       }
       else if (activeZone === 'GRID') {
-        if (isRight) updateCardFocus(currentCardIndex + 1);
-        if (isLeft) updateCardFocus(currentCardIndex - 1);
+        const cards = getCardsInCurrentRow();
+
+        if (isRight && currentCardIndex < cards.length - 1) {
+          updateCardFocus(currentRowIndex, currentCardIndex + 1);
+        }
+        if (isLeft && currentCardIndex > 0) {
+          updateCardFocus(currentRowIndex, currentCardIndex - 1);
+        }
+        if (isDown) {
+          if (currentRowIndex < rows.length - 1) {
+            updateCardFocus(currentRowIndex + 1, currentCardIndex);
+          }
+        }
         if (isUp) {
-          cards[currentCardIndex].classList.remove('focused');
-          activeZone = 'HERO';
-          updateHeroBtnFocus(currentHeroBtnIndex);
+          if (currentRowIndex > 0) {
+            updateCardFocus(currentRowIndex - 1, currentCardIndex);
+          } else {
+            // Focus back up to Hero
+            cards[currentCardIndex].classList.remove('focused');
+            activeZone = 'HERO';
+            updateHeroBtnFocus(currentHeroBtnIndex);
+          }
         }
         if (isEnter) {
           const card = cards[currentCardIndex];
-          openDetails(
-            card.getAttribute('data-title'),
-            card.getAttribute('data-desc'),
-            card.getAttribute('data-video')
-          );
+          openDetails(card.getAttribute('data-title'), card.getAttribute('data-desc'), card.getAttribute('data-video'));
         }
       } 
       else if (activeZone === 'DETAILS') {
@@ -435,9 +451,7 @@
         if (isRight && currentPlayerBtnIndex > 0 && currentPlayerBtnIndex < 3) updatePlayerBtnFocus(currentPlayerBtnIndex + 1);
         if (isLeft && currentPlayerBtnIndex > 1) updatePlayerBtnFocus(currentPlayerBtnIndex - 1);
 
-        if (isBack) {
-          stopPlayback();
-        }
+        if (isBack) stopPlayback();
 
         if (isEnter) {
           if (currentPlayerBtnIndex === 0) stopPlayback();
