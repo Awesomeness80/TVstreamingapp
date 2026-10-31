@@ -9,25 +9,97 @@
       color: #fff; 
       font-family: sans-serif; 
       margin: 0; 
-      padding: 20px; 
+      padding: 0; 
       overflow-x: hidden; 
     }
-    h2 { margin-left: 10px; }
+
+    /* Hero Banner Section at Top */
+    .hero-banner {
+      position: relative;
+      width: 100%;
+      height: 60vh;
+      background: linear-gradient(to top, #141414 10%, transparent 60%),
+                  linear-gradient(to right, rgba(0,0,0,0.85) 35%, transparent 70%),
+                  url('https://upload.wikimedia.org/wikipedia/commons/c/c5/Big_buck_bunny_poster_big.bjp.jpg') no-repeat center top / cover;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      padding-left: 50px;
+      box-sizing: border-box;
+    }
+    
+    .hero-title {
+      font-size: 3.2rem;
+      margin: 0 0 10px 0;
+      text-shadow: 2px 2px 8px rgba(0,0,0,0.8);
+    }
+
+    .hero-desc {
+      font-size: 1.1rem;
+      color: #ddd;
+      max-width: 500px;
+      margin-bottom: 25px;
+      line-height: 1.4;
+      text-shadow: 1px 1px 4px rgba(0,0,0,0.8);
+    }
+
+    .hero-buttons {
+      display: flex;
+      gap: 15px;
+    }
+
+    .hero-btn {
+      padding: 12px 28px;
+      border-radius: 4px;
+      font-size: 1.2rem;
+      font-weight: bold;
+      cursor: pointer;
+      border: 3px solid transparent;
+      background-color: rgba(100, 100, 100, 0.7);
+      color: white;
+      transition: all 0.2s;
+    }
+
+    .hero-btn-play {
+      background-color: #fff;
+      color: #000;
+    }
+
+    /* Focused State for TV Remote */
+    .hero-btn.focused {
+      border-color: #e50914;
+      transform: scale(1.08);
+      outline: none;
+      box-shadow: 0 0 15px rgba(229, 9, 20, 0.8);
+    }
+
+    /* Main Grid Area Below Hero */
+    .content-section {
+      margin-top: -30px;
+      position: relative;
+      z-index: 2;
+    }
+
+    h2 { 
+      margin-left: 50px; 
+      font-size: 1.4rem;
+      margin-bottom: 10px;
+    }
 
     /* Scrollable Row Styling */
     .grid { 
       display: flex; 
       gap: 15px; 
-      padding: 20px 10px; 
-      overflow-x: auto; /* Side-to-side scrolling */
+      padding: 10px 50px 30px 50px; 
+      overflow-x: auto; 
       scroll-behavior: smooth;
-      scrollbar-width: none; /* Hide scrollbar on Firefox/TVs */
+      scrollbar-width: none; 
     }
     .grid::-webkit-scrollbar {
-      display: none; /* Hide scrollbar on Chrome/Safari/Smart TVs */
+      display: none; 
     }
 
-    /* Fixed-size Cards to Prevent Squishing */
+    /* Fixed-size Cards */
     .card {
       min-width: 180px; 
       width: 180px; 
@@ -36,7 +108,7 @@
       border-radius: 8px;
       border: 4px solid transparent; 
       transition: transform 0.2s, border-color 0.2s;
-      flex-shrink: 0; /* Prevents cards from squishing together */
+      flex-shrink: 0; 
       overflow: hidden; 
       cursor: pointer;
     }
@@ -47,7 +119,7 @@
       z-index: 5;
     }
 
-    /* Netflix-style Details Sidebar Overlay */
+    /* Details Sidebar Overlay */
     .details-overlay {
       position: fixed; top: 0; left: 0; width: 100%; height: 100%;
       background: linear-gradient(to right, rgba(0,0,0,0.95) 35%, rgba(0,0,0,0.4) 100%);
@@ -72,7 +144,7 @@
     }
     video { width: 100%; height: 100%; object-fit: contain; }
 
-    /* Video Player Overlay Controls */
+    /* Video Player Controls */
     .player-controls {
       position: absolute; bottom: 0; left: 0; right: 0; top: 0;
       background: linear-gradient(to top, rgba(0,0,0,0.85) 0%, transparent 40%, rgba(0,0,0,0.6) 100%);
@@ -92,7 +164,6 @@
 
     .bottom-controls { display: flex; flex-direction: column; gap: 15px; }
     
-    /* Netflix Red Progress Bar */
     .progress-container {
       width: 100%; height: 8px; background-color: rgba(255, 255, 255, 0.3);
       border-radius: 4px; overflow: hidden; position: relative;
@@ -104,24 +175,37 @@
 </head>
 <body>
 
-  <h2>Trending Shows</h2>
-  <div class="grid" id="movieGrid">
-    <div class="card focused" tabindex="0" 
-         data-title="Terminator 2" 
-         data-desc="A giant rabbit with a heart of gold deals with forest bullies."
-         data-video="https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4">
-      <img src="https://i.ebayimg.com/thumbs/images/g/XT8AAOSwDaBcM3jf/s-l500.jpg" style="width:100%; height:100%; object-fit:cover;">
+  <!-- Netflix Hero Player Banner at Top -->
+  <div class="hero-banner" id="heroBanner">
+    <h1 class="hero-title" id="heroTitle">Big Buck Bunny</h1>
+    <p class="hero-desc" id="heroDesc">A giant rabbit with a heart of gold deals with forest bullies in this featured classic adventure.</p>
+    <div class="hero-buttons">
+      <div class="hero-btn hero-btn-play focused" id="heroBtnPlay" tabindex="0">► Play</div>
+      <div class="hero-btn" id="heroBtnInfo" tabindex="0">ⓘ More Info</div>
     </div>
-    
-    <div class="card" tabindex="0" 
-         data-title="Elephant's Dream" 
-         data-desc="Two friends explore a strange machine-driven world."
-         data-video="https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ElephantsDream.mp4">
-      <img src="https://upload.wikimedia.org/wikipedia/commons/e/e8/Elephants_Dream_poster.jpg" style="width:100%; height:100%; object-fit:cover;">
+  </div>
+
+  <!-- Content Row Below Hero Banner -->
+  <div class="content-section">
+    <h2>Trending Now</h2>
+    <div class="grid" id="movieGrid">
+      <div class="card" tabindex="0" 
+           data-title="Big Buck Bunny" 
+           data-desc="A giant rabbit with a heart of gold deals with forest bullies."
+           data-video="https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4">
+        <img src="https://upload.wikimedia.org/wikipedia/commons/c/c5/Big_buck_bunny_poster_big.bjp.jpg" style="width:100%; height:100%; object-fit:cover;">
+      </div>
+      
+      <div class="card" tabindex="0" 
+           data-title="Elephant's Dream" 
+           data-desc="Two friends explore a strange machine-driven world."
+           data-video="https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ElephantsDream.mp4">
+        <img src="https://upload.wikimedia.org/wikipedia/commons/e/e8/Elephants_Dream_poster.jpg" style="width:100%; height:100%; object-fit:cover;">
+      </div>
+
+      <!-- PASTE YOUR EXTRA MOVIE CARDS HERE -->
+
     </div>
-
-    <!-- PASTE YOUR NEW MOVIE CARDS HERE -->
-
   </div>
 
   <!-- Left Sidebar Details Screen -->
@@ -159,6 +243,7 @@
 
   <script>
     const cards = Array.from(document.querySelectorAll('.card'));
+    const heroBtns = [document.getElementById('heroBtnPlay'), document.getElementById('heroBtnInfo')];
     const detailsScreen = document.getElementById('detailsScreen');
     const playerScreen = document.getElementById('playerScreen');
     const playerControls = document.getElementById('playerControls');
@@ -173,12 +258,24 @@
       document.getElementById('pBtnFf')
     ];
 
+    let activeZone = 'HERO'; // 'HERO', 'GRID', 'DETAILS', or 'PLAYER'
+    let currentHeroBtnIndex = 0;
     let currentCardIndex = 0;
     let currentDetailBtnIndex = 0;
     let currentPlayerBtnIndex = 0;
-    let activeMode = 'GRID'; // 'GRID', 'DETAILS', or 'PLAYER'
-    let selectedVideoUrl = '';
+    
+    // Default featured video for hero banner
+    let featuredVideoUrl = "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4";
+    let selectedVideoUrl = "";
     let controlsTimeout = null;
+
+    function updateHeroBtnFocus(newIndex) {
+      if (newIndex >= 0 && newIndex < heroBtns.length) {
+        heroBtns[currentHeroBtnIndex].classList.remove('focused');
+        currentHeroBtnIndex = newIndex;
+        heroBtns[currentHeroBtnIndex].classList.add('focused');
+      }
+    }
 
     function updateCardFocus(newIndex) {
       if (newIndex >= 0 && newIndex < cards.length) {
@@ -186,7 +283,6 @@
         currentCardIndex = newIndex;
         cards[currentCardIndex].classList.add('focused');
         
-        // Auto-scroll the page horizontally to focus the selected card
         cards[currentCardIndex].scrollIntoView({ 
           behavior: 'smooth', 
           block: 'nearest', 
@@ -219,26 +315,25 @@
       }, 4000);
     }
 
-    function openDetails() {
-      const card = cards[currentCardIndex];
-      document.getElementById('showTitle').innerText = card.getAttribute('data-title');
-      document.getElementById('showDesc').innerText = card.getAttribute('data-desc');
-      selectedVideoUrl = card.getAttribute('data-video');
+    function openDetails(title, desc, videoUrl) {
+      document.getElementById('showTitle').innerText = title;
+      document.getElementById('showDesc').innerText = desc;
+      selectedVideoUrl = videoUrl;
       
-      activeMode = 'DETAILS';
+      activeZone = 'DETAILS';
       detailsScreen.style.display = 'flex';
       updateDetailBtnFocus(0);
     }
 
     function closeDetails() {
-      activeMode = 'GRID';
+      activeZone = 'GRID';
       detailsScreen.style.display = 'none';
     }
 
-    function startPlayback() {
-      activeMode = 'PLAYER';
+    function startPlayback(url) {
+      activeZone = 'PLAYER';
       playerScreen.style.display = 'block';
-      videoPlayer.src = selectedVideoUrl;
+      videoPlayer.src = url;
       videoPlayer.play();
       updatePlayerBtnFocus(0);
       showPlayerControls();
@@ -249,11 +344,11 @@
       videoPlayer.src = '';
       playerScreen.style.display = 'none';
       detailsScreen.style.display = 'none';
-      activeMode = 'GRID';
+      activeZone = 'GRID';
       clearTimeout(controlsTimeout);
     }
 
-    // Update Progress Bar
+    // Video Progress Bar update
     videoPlayer.addEventListener('timeupdate', () => {
       if (videoPlayer.duration) {
         const percent = (videoPlayer.currentTime / videoPlayer.duration) * 100;
@@ -261,23 +356,57 @@
       }
     });
 
-    // Remote Control Handling
+    // Smart TV Remote Key Handling
     document.addEventListener('keydown', (e) => {
-      if (activeMode === 'GRID') {
+      if (activeZone === 'HERO') {
+        if (e.key === 'ArrowRight') updateHeroBtnFocus(1);
+        if (e.key === 'ArrowLeft') updateHeroBtnFocus(0);
+        if (e.key === 'ArrowDown') {
+          // Switch focus down to the movie row
+          heroBtns[currentHeroBtnIndex].classList.remove('focused');
+          activeZone = 'GRID';
+          updateCardFocus(currentCardIndex);
+        }
+        if (e.key === 'Enter') {
+          if (currentHeroBtnIndex === 0) {
+            startPlayback(featuredVideoUrl);
+          } else {
+            openDetails(
+              document.getElementById('heroTitle').innerText, 
+              document.getElementById('heroDesc').innerText, 
+              featuredVideoUrl
+            );
+          }
+        }
+      }
+      else if (activeZone === 'GRID') {
         if (e.key === 'ArrowRight') updateCardFocus(currentCardIndex + 1);
         if (e.key === 'ArrowLeft') updateCardFocus(currentCardIndex - 1);
-        if (e.key === 'Enter') openDetails();
+        if (e.key === 'ArrowUp') {
+          // Switch focus up to the Hero Banner
+          cards[currentCardIndex].classList.remove('focused');
+          activeZone = 'HERO';
+          updateHeroBtnFocus(currentHeroBtnIndex);
+        }
+        if (e.key === 'Enter') {
+          const card = cards[currentCardIndex];
+          openDetails(
+            card.getAttribute('data-title'),
+            card.getAttribute('data-desc'),
+            card.getAttribute('data-video')
+          );
+        }
       } 
-      else if (activeMode === 'DETAILS') {
+      else if (activeZone === 'DETAILS') {
         if (e.key === 'ArrowDown') updateDetailBtnFocus(1);
         if (e.key === 'ArrowUp') updateDetailBtnFocus(0);
         if (e.key === 'Escape' || e.key === 'Backspace') closeDetails();
         if (e.key === 'Enter') {
-          if (currentDetailBtnIndex === 0) startPlayback();
+          if (currentDetailBtnIndex === 0) startPlayback(selectedVideoUrl);
           if (currentDetailBtnIndex === 1) closeDetails();
         }
       } 
-      else if (activeMode === 'PLAYER') {
+      else if (activeZone === 'PLAYER') {
         if (!playerControls.classList.contains('visible')) {
           showPlayerControls();
           return;
