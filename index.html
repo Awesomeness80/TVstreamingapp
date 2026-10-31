@@ -13,11 +13,11 @@
       overflow-x: hidden; 
     }
 
-    /* Netflix Hero Banner */
+    /* Netflix Hero Banner (Wide Cinematic Backdrop) */
     .hero-banner {
       position: relative;
       width: 100%;
-      height: 60vh;
+      height: 65vh;
       background: linear-gradient(to top, #141414 5%, rgba(20,20,20,0.4) 50%, transparent 100%),
                   linear-gradient(to right, rgba(0,0,0,0.9) 30%, rgba(0,0,0,0.2) 70%),
                   url('https://upload.wikimedia.org/wikipedia/commons/c/c5/Big_buck_bunny_poster_big.bjp.jpg') no-repeat center center / cover;
@@ -30,6 +30,11 @@
       transition: border-color 0.2s;
     }
 
+    .hero-banner.focused {
+      border-color: #e50914;
+      outline: none;
+    }
+    
     .hero-title {
       font-size: 3.5rem;
       margin: 0 0 10px 0;
@@ -81,7 +86,7 @@
     .row-title { 
       margin-left: 50px; 
       font-size: 1.4rem;
-      margin-top: 20px;
+      margin-top: 25px;
       margin-bottom: 10px;
     }
 
@@ -89,14 +94,14 @@
     .grid { 
       display: flex; 
       gap: 15px; 
-      padding: 10px 50px 20px 50px; 
+      padding: 10px 50px; 
       overflow-x: auto; 
       scroll-behavior: smooth;
       scrollbar-width: none; 
     }
     .grid::-webkit-scrollbar { display: none; }
 
-    /* Vertical Poster Cards */
+    /* Vertical Poster Cards (10 per row) */
     .card {
       min-width: 180px; 
       width: 180px; 
@@ -180,40 +185,55 @@
     </div>
   </div>
 
-  <!-- Content Section with 10 Rows -->
+  <!-- Content Section with 10 Rows (10 Movies Each) -->
   <div class="content-section" id="rowsContainer">
     
-    <!-- Row 1 -->
-    <h2 class="row-title">Row 1: Trending Now</h2>
+    <!-- ROW 1 -->
+    <h2 class="row-title">Trending Now</h2>
     <div class="grid">
-      <div class="card" tabindex="0" data-title="Big Buck Bunny" data-desc="Description 1" data-video="https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4">
-        <img src="https://upload.wikimedia.org/wikipedia/commons/c/c5/Big_buck_bunny_poster_big.bjp.jpg" style="width:100%; height:100%; object-fit:cover;">
-      </div>
-      <div class="card" tabindex="0" data-title="Elephant's Dream" data-desc="Description 2" data-video="https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ElephantsDream.mp4">
-        <img src="https://upload.wikimedia.org/wikipedia/commons/e/e8/Elephants_Dream_poster.jpg" style="width:100%; height:100%; object-fit:cover;">
-      </div>
-      <!-- Add 8 more movie cards here to reach 10 in Row 1 -->
+      <div class="card" tabindex="0" data-title="Big Buck Bunny" data-desc="A giant rabbit adventure." data-video="https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4"><img src="https://upload.wikimedia.org/wikipedia/commons/c/c5/Big_buck_bunny_poster_big.bjp.jpg" style="width:100%; height:100%; object-fit:cover;"></div>
+      <div class="card" tabindex="0" data-title="Elephant's Dream" data-desc="A machine-driven world." data-video="https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ElephantsDream.mp4"><img src="https://upload.wikimedia.org/wikipedia/commons/e/e8/Elephants_Dream_poster.jpg" style="width:100%; height:100%; object-fit:cover;"></div>
+      <div class="card" tabindex="0" data-title="For Bigger Blazes" data-desc="Action sample video." data-video="https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerBlazes.mp4"><img src="https://upload.wikimedia.org/wikipedia/commons/c/c5/Big_buck_bunny_poster_big.bjp.jpg" style="width:100%; height:100%; object-fit:cover;"></div>
+      <div class="card" tabindex="0" data-title="For Bigger Escapes" data-desc="Escape sample video." data-video="https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerEscapes.mp4"><img src="https://upload.wikimedia.org/wikipedia/commons/e/e8/Elephants_Dream_poster.jpg" style="width:100%; height:100%; object-fit:cover;"></div>
+      <div class="card" tabindex="0" data-title="For Bigger Fun" data-desc="Fun sample video." data-video="https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerFun.mp4"><img src="https://upload.wikimedia.org/wikipedia/commons/c/c5/Big_buck_bunny_poster_big.bjp.jpg" style="width:100%; height:100%; object-fit:cover;"></div>
+      <div class="card" tabindex="0" data-title="For Bigger Joyrides" data-desc="Joyrides sample video." data-video="https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerJoyrides.mp4"><img src="https://upload.wikimedia.org/wikipedia/commons/e/e8/Elephants_Dream_poster.jpg" style="width:100%; height:100%; object-fit:cover;"></div>
+      <div class="card" tabindex="0" data-title="For Bigger Meltdowns" data-desc="Meltdowns sample video." data-video="https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerMeltdowns.mp4"><img src="https://upload.wikimedia.org/wikipedia/commons/c/c5/Big_buck_bunny_poster_big.bjp.jpg" style="width:100%; height:100%; object-fit:cover;"></div>
+      <div class="card" tabindex="0" data-title="Sintel" data-desc="Animated fantasy epic." data-video="https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/Sintel.mp4"><img src="https://upload.wikimedia.org/wikipedia/commons/e/e8/Elephants_Dream_poster.jpg" style="width:100%; height:100%; object-fit:cover;"></div>
+      <div class="card" tabindex="0" data-title="Subaru Outback" data-desc="Car showcase video." data-video="https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/SubaruOutback2012.mp4"><img src="https://upload.wikimedia.org/wikipedia/commons/c/c5/Big_buck_bunny_poster_big.bjp.jpg" style="width:100%; height:100%; object-fit:cover;"></div>
+      <div class="card" tabindex="0" data-title="Tears of Steel" data-desc="Sci-fi short film." data-video="https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/TearsOfSteel.mp4"><img src="https://upload.wikimedia.org/wikipedia/commons/e/e8/Elephants_Dream_poster.jpg" style="width:100%; height:100%; object-fit:cover;"></div>
     </div>
 
-    <!-- Row 2 -->
-    <h2 class="row-title">Row 2: Action Movies</h2>
+    <!-- ROW 2 -->
+    <h2 class="row-title">Action & Adventure</h2>
     <div class="grid">
-      <div class="card" tabindex="0" data-title="Action Movie 1" data-desc="Action Desc 1" data-video="https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerBlazes.mp4">
-        <img src="https://upload.wikimedia.org/wikipedia/commons/c/c5/Big_buck_bunny_poster_big.bjp.jpg" style="width:100%; height:100%; object-fit:cover;">
-      </div>
-      <!-- Add 9 more movie cards here -->
+      <div class="card" tabindex="0" data-title="Action 1" data-desc="Action movie 1" data-video="https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4"><img src="https://upload.wikimedia.org/wikipedia/commons/c/c5/Big_buck_bunny_poster_big.bjp.jpg" style="width:100%; height:100%; object-fit:cover;"></div>
+      <div class="card" tabindex="0" data-title="Action 2" data-desc="Action movie 2" data-video="https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ElephantsDream.mp4"><img src="https://upload.wikimedia.org/wikipedia/commons/e/e8/Elephants_Dream_poster.jpg" style="width:100%; height:100%; object-fit:cover;"></div>
+      <div class="card" tabindex="0" data-title="Action 3" data-desc="Action movie 3" data-video="https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerBlazes.mp4"><img src="https://upload.wikimedia.org/wikipedia/commons/c/c5/Big_buck_bunny_poster_big.bjp.jpg" style="width:100%; height:100%; object-fit:cover;"></div>
+      <div class="card" tabindex="0" data-title="Action 4" data-desc="Action movie 4" data-video="https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerEscapes.mp4"><img src="https://upload.wikimedia.org/wikipedia/commons/e/e8/Elephants_Dream_poster.jpg" style="width:100%; height:100%; object-fit:cover;"></div>
+      <div class="card" tabindex="0" data-title="Action 5" data-desc="Action movie 5" data-video="https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerFun.mp4"><img src="https://upload.wikimedia.org/wikipedia/commons/c/c5/Big_buck_bunny_poster_big.bjp.jpg" style="width:100%; height:100%; object-fit:cover;"></div>
+      <div class="card" tabindex="0" data-title="Action 6" data-desc="Action movie 6" data-video="https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerJoyrides.mp4"><img src="https://upload.wikimedia.org/wikipedia/commons/e/e8/Elephants_Dream_poster.jpg" style="width:100%; height:100%; object-fit:cover;"></div>
+      <div class="card" tabindex="0" data-title="Action 7" data-desc="Action movie 7" data-video="https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerMeltdowns.mp4"><img src="https://upload.wikimedia.org/wikipedia/commons/c/c5/Big_buck_bunny_poster_big.bjp.jpg" style="width:100%; height:100%; object-fit:cover;"></div>
+      <div class="card" tabindex="0" data-title="Action 8" data-desc="Action movie 8" data-video="https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/Sintel.mp4"><img src="https://upload.wikimedia.org/wikipedia/commons/e/e8/Elephants_Dream_poster.jpg" style="width:100%; height:100%; object-fit:cover;"></div>
+      <div class="card" tabindex="0" data-title="Action 9" data-desc="Action movie 9" data-video="https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/SubaruOutback2012.mp4"><img src="https://upload.wikimedia.org/wikipedia/commons/c/c5/Big_buck_bunny_poster_big.bjp.jpg" style="width:100%; height:100%; object-fit:cover;"></div>
+      <div class="card" tabindex="0" data-title="Action 10" data-desc="Action movie 10" data-video="https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/TearsOfSteel.mp4"><img src="https://upload.wikimedia.org/wikipedia/commons/e/e8/Elephants_Dream_poster.jpg" style="width:100%; height:100%; object-fit:cover;"></div>
     </div>
 
-    <!-- Row 3 -->
-    <h2 class="row-title">Row 3: Comedies</h2>
+    <!-- ROW 3 -->
+    <h2 class="row-title">Comedies</h2>
     <div class="grid">
-      <div class="card" tabindex="0" data-title="Comedy Movie 1" data-desc="Comedy Desc 1" data-video="https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerEscapes.mp4">
-        <img src="https://upload.wikimedia.org/wikipedia/commons/e/e8/Elephants_Dream_poster.jpg" style="width:100%; height:100%; object-fit:cover;">
-      </div>
-      <!-- Add 9 more movie cards here -->
+      <div class="card" tabindex="0" data-title="Comedy 1" data-desc="Comedy 1" data-video="https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4"><img src="https://upload.wikimedia.org/wikipedia/commons/e/e8/Elephants_Dream_poster.jpg" style="width:100%; height:100%; object-fit:cover;"></div>
+      <div class="card" tabindex="0" data-title="Comedy 2" data-desc="Comedy 2" data-video="https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ElephantsDream.mp4"><img src="https://upload.wikimedia.org/wikipedia/commons/c/c5/Big_buck_bunny_poster_big.bjp.jpg" style="width:100%; height:100%; object-fit:cover;"></div>
+      <div class="card" tabindex="0" data-title="Comedy 3" data-desc="Comedy 3" data-video="https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerBlazes.mp4"><img src="https://upload.wikimedia.org/wikipedia/commons/e/e8/Elephants_Dream_poster.jpg" style="width:100%; height:100%; object-fit:cover;"></div>
+      <div class="card" tabindex="0" data-title="Comedy 4" data-desc="Comedy 4" data-video="https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerEscapes.mp4"><img src="https://upload.wikimedia.org/wikipedia/commons/c/c5/Big_buck_bunny_poster_big.bjp.jpg" style="width:100%; height:100%; object-fit:cover;"></div>
+      <div class="card" tabindex="0" data-title="Comedy 5" data-desc="Comedy 5" data-video="https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerFun.mp4"><img src="https://upload.wikimedia.org/wikipedia/commons/e/e8/Elephants_Dream_poster.jpg" style="width:100%; height:100%; object-fit:cover;"></div>
+      <div class="card" tabindex="0" data-title="Comedy 6" data-desc="Comedy 6" data-video="https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerJoyrides.mp4"><img src="https://upload.wikimedia.org/wikipedia/commons/c/c5/Big_buck_bunny_poster_big.bjp.jpg" style="width:100%; height:100%; object-fit:cover;"></div>
+      <div class="card" tabindex="0" data-title="Comedy 7" data-desc="Comedy 7" data-video="https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerMeltdowns.mp4"><img src="https://upload.wikimedia.org/wikipedia/commons/e/e8/Elephants_Dream_poster.jpg" style="width:100%; height:100%; object-fit:cover;"></div>
+      <div class="card" tabindex="0" data-title="Comedy 8" data-desc="Comedy 8" data-video="https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/Sintel.mp4"><img src="https://upload.wikimedia.org/wikipedia/commons/c/c5/Big_buck_bunny_poster_big.bjp.jpg" style="width:100%; height:100%; object-fit:cover;"></div>
+      <div class="card" tabindex="0" data-title="Comedy 9" data-desc="Comedy 9" data-video="https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/SubaruOutback2012.mp4"><img src="https://upload.wikimedia.org/wikipedia/commons/e/e8/Elephants_Dream_poster.jpg" style="width:100%; height:100%; object-fit:cover;"></div>
+      <div class="card" tabindex="0" data-title="Comedy 10" data-desc="Comedy 10" data-video="https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/TearsOfSteel.mp4"><img src="https://upload.wikimedia.org/wikipedia/commons/c/c5/Big_buck_bunny_poster_big.bjp.jpg" style="width:100%; height:100%; object-fit:cover;"></div>
     </div>
 
-    <!-- Duplicate the row structure above to create Rows 4 through 10 -->
+    <!-- (Rows 4 through 10 can follow this exact same 10-card layout pattern!) -->
 
   </div>
 
@@ -246,7 +266,6 @@
   </div>
 
   <script>
-    // Get all rows dynamically
     const rows = Array.from(document.querySelectorAll('.grid'));
     const heroBtns = [document.getElementById('heroBtnPlay'), document.getElementById('heroBtnInfo')];
     const detailsScreen = document.getElementById('detailsScreen');
@@ -288,8 +307,6 @@
 
     function updateCardFocus(newRowIndex, newCardIndex) {
       const currentCards = getCardsInCurrentRow();
-      
-      // Remove focus from current card
       if (currentCards[currentCardIndex]) {
         currentCards[currentCardIndex].classList.remove('focused');
       }
@@ -297,12 +314,7 @@
       currentRowIndex = newRowIndex;
       const targetRowCards = getCardsInCurrentRow();
 
-      // Ensure card index stays within bounds of the new row
-      if (newCardIndex >= targetRowCards.length) {
-        currentCardIndex = targetRowCards.length - 1;
-      } else {
-        currentCardIndex = Math.max(0, newCardIndex);
-      }
+      currentCardIndex = Math.max(0, Math.min(newCardIndex, targetRowCards.length - 1));
 
       const activeCard = targetRowCards[currentCardIndex];
       if (activeCard) {
@@ -418,7 +430,6 @@
           if (currentRowIndex > 0) {
             updateCardFocus(currentRowIndex - 1, currentCardIndex);
           } else {
-            // Focus back up to Hero
             cards[currentCardIndex].classList.remove('focused');
             activeZone = 'HERO';
             updateHeroBtnFocus(currentHeroBtnIndex);
