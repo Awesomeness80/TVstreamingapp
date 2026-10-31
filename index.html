@@ -17,7 +17,7 @@
     /* Netflix-style Details Sidebar Overlay */
     .details-overlay {
       position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-      background: linear-gradient(to right, rgba(0,0,0,0.9) 35%, rgba(0,0,0,0.4) 100%);
+      background: linear-gradient(to right, rgba(0,0,0,0.95) 35%, rgba(0,0,0,0.4) 100%);
       display: none; flex-direction: column; justify-content: center;
       padding-left: 50px; box-sizing: border-box; z-index: 10;
     }
@@ -37,7 +37,36 @@
       position: fixed; top: 0; left: 0; width: 100vw; height: 100vh;
       background-color: #000; display: none; z-index: 20;
     }
-    video { width: 100%; height: 100%; }
+    video { width: 100%; height: 100%; object-fit: contain; }
+
+    /* Video Player Overlay Controls */
+    .player-controls {
+      position: absolute; bottom: 0; left: 0; right: 0; top: 0;
+      background: linear-gradient(to top, rgba(0,0,0,0.85) 0%, transparent 40%, rgba(0,0,0,0.6) 100%);
+      display: flex; flex-direction: column; justify-content: space-between;
+      padding: 30px 50px; box-sizing: border-box; opacity: 0; transition: opacity 0.3s;
+      z-index: 25; pointer-events: none;
+    }
+    .player-controls.visible { opacity: 1; pointer-events: auto; }
+
+    .top-controls { display: flex; justify-content: flex-start; }
+    .control-btn {
+      background-color: rgba(40, 40, 40, 0.8); color: white; border: 2px solid transparent;
+      padding: 10px 20px; border-radius: 4px; font-size: 1rem; font-weight: bold;
+      cursor: pointer; margin-right: 10px;
+    }
+    .control-btn.focused { border-color: #e50914; background-color: #e50914; }
+
+    .bottom-controls { display: flex; flex-direction: column; gap: 15px; }
+    
+    /* Netflix Red Progress Bar */
+    .progress-container {
+      width: 100%; height: 8px; background-color: rgba(255, 255, 255, 0.3);
+      border-radius: 4px; overflow: hidden; position: relative;
+    }
+    .progress-bar { width: 0%; height: 100%; background-color: #e50914; transition: width 0.2s linear; }
+
+    .control-buttons-row { display: flex; align-items: center; gap: 15px; }
   </style>
 </head>
 <body>
@@ -45,10 +74,10 @@
   <h2>Trending Shows</h2>
   <div class="grid" id="movieGrid">
     <div class="card focused" tabindex="0" 
-         data-title="Terminator 2" 
+         data-title="Big Buck Bunny" 
          data-desc="A giant rabbit with a heart of gold deals with forest bullies."
-         data-video="https://dn710702.ca.archive.org/0/items/terminator-2-judgment-day-1991-blu-ray-v-2-720p-fzmovies.net-4beb-52c-21b-25a-27018a-52684ae-967a-6d/Terminator_2__Judgment_Day_(1991)_BluRay%20v2_720p_(fzmovies.net)_4beb52c21b25a27018a52684ae967a6d.mp4">
-      <img src="https://i.ebayimg.com/thumbs/images/g/XT8AAOSwDaBcM3jf/s-l500.jpg">
+         data-video="https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4">
+      <img src="https://upload.wikimedia.org/wikipedia/commons/c/c5/Big_buck_bunny_poster_big.bjp.jpg" style="width:100%; height:100%; object-fit:cover;">
     </div>
     
     <div class="card" tabindex="0" 
@@ -71,20 +100,49 @@
 
   <!-- In-Site Fullscreen Player -->
   <div class="player-overlay" id="playerScreen">
-    <video id="videoPlayer" controls autoplay></video>
+    <video id="videoPlayer"></video>
+    
+    <!-- Player Overlay Controls -->
+    <div class="player-controls" id="playerControls">
+      <div class="top-controls">
+        <div class="control-btn focused" id="pBtnHome">← Home Screen</div>
+      </div>
+      
+      <div class="bottom-controls">
+        <div class="progress-container">
+          <div class="progress-bar" id="progressBar"></div>
+        </div>
+        <div class="control-buttons-row">
+          <div class="control-btn" id="pBtnRw">« 10s</div>
+          <div class="control-btn" id="pBtnPlayPause">❚❚ Pause</div>
+          <div class="control-btn" id="pBtnFf">10s »</div>
+        </div>
+      </div>
+    </div>
   </div>
 
   <script>
     const cards = Array.from(document.querySelectorAll('.card'));
     const detailsScreen = document.getElementById('detailsScreen');
     const playerScreen = document.getElementById('playerScreen');
+    const playerControls = document.getElementById('playerControls');
     const videoPlayer = document.getElementById('videoPlayer');
-    const actionBtns = [document.getElementById('btnPlay'), document.getElementById('btnBack')];
+    const progressBar = document.getElementById('progressBar');
+
+    const detailBtns = [document.getElementById('btnPlay'), document.getElementById('btnBack')];
+    const playerBtns = [
+      document.getElementById('pBtnHome'),
+      document.getElementById('pBtnRw'),
+      document.getElementById('pBtnPlayPause'),
+      document.getElementById('pBtnFf')
+    ];
 
     let currentCardIndex = 0;
-    let currentBtnIndex = 0;
+    let currentDetailBtnIndex = 0;
+    let currentPlayerBtnIndex = 0;
     let activeMode = 'GRID'; // 'GRID', 'DETAILS', or 'PLAYER'
     let selectedVideoUrl = '';
+    let controlsTimeout = null;
 
     function updateCardFocus(newIndex) {
       if (newIndex >= 0 && newIndex < cards.length) {
@@ -94,12 +152,28 @@
       }
     }
 
-    function updateBtnFocus(newIndex) {
-      if (newIndex >= 0 && newIndex < actionBtns.length) {
-        actionBtns[currentBtnIndex].classList.remove('focused');
-        currentBtnIndex = newIndex;
-        actionBtns[currentBtnIndex].classList.add('focused');
+    function updateDetailBtnFocus(newIndex) {
+      if (newIndex >= 0 && newIndex < detailBtns.length) {
+        detailBtns[currentDetailBtnIndex].classList.remove('focused');
+        currentDetailBtnIndex = newIndex;
+        detailBtns[currentDetailBtnIndex].classList.add('focused');
       }
+    }
+
+    function updatePlayerBtnFocus(newIndex) {
+      if (newIndex >= 0 && newIndex < playerBtns.length) {
+        playerBtns[currentPlayerBtnIndex].classList.remove('focused');
+        currentPlayerBtnIndex = newIndex;
+        playerBtns[currentPlayerBtnIndex].classList.add('focused');
+      }
+    }
+
+    function showPlayerControls() {
+      playerControls.classList.add('visible');
+      clearTimeout(controlsTimeout);
+      controlsTimeout = setTimeout(() => {
+        playerControls.classList.remove('visible');
+      }, 4000);
     }
 
     function openDetails() {
@@ -110,7 +184,7 @@
       
       activeMode = 'DETAILS';
       detailsScreen.style.display = 'flex';
-      updateBtnFocus(0);
+      updateDetailBtnFocus(0);
     }
 
     function closeDetails() {
@@ -123,16 +197,28 @@
       playerScreen.style.display = 'block';
       videoPlayer.src = selectedVideoUrl;
       videoPlayer.play();
+      updatePlayerBtnFocus(0);
+      showPlayerControls();
     }
 
     function stopPlayback() {
       videoPlayer.pause();
       videoPlayer.src = '';
       playerScreen.style.display = 'none';
-      activeMode = 'DETAILS';
+      detailsScreen.style.display = 'none';
+      activeMode = 'GRID';
+      clearTimeout(controlsTimeout);
     }
 
-    // Navigation Key handling for Smart TV Remotes
+    // Update Progress Bar
+    videoPlayer.addEventListener('timeupdate', () => {
+      if (videoPlayer.duration) {
+        const percent = (videoPlayer.currentTime / videoPlayer.duration) * 100;
+        progressBar.style.width = percent + '%';
+      }
+    });
+
+    // Remote Control Handling
     document.addEventListener('keydown', (e) => {
       if (activeMode === 'GRID') {
         if (e.key === 'ArrowRight') updateCardFocus(currentCardIndex + 1);
@@ -140,17 +226,54 @@
         if (e.key === 'Enter') openDetails();
       } 
       else if (activeMode === 'DETAILS') {
-        if (e.key === 'ArrowDown') updateBtnFocus(1);
-        if (e.key === 'ArrowUp') updateBtnFocus(0);
+        if (e.key === 'ArrowDown') updateDetailBtnFocus(1);
+        if (e.key === 'ArrowUp') updateDetailBtnFocus(0);
         if (e.key === 'Escape' || e.key === 'Backspace') closeDetails();
         if (e.key === 'Enter') {
-          if (currentBtnIndex === 0) startPlayback();
-          if (currentBtnIndex === 1) closeDetails();
+          if (currentDetailBtnIndex === 0) startPlayback();
+          if (currentDetailBtnIndex === 1) closeDetails();
         }
       } 
       else if (activeMode === 'PLAYER') {
-        // Press Back or Escape on TV remote to stop video and return to details
-        if (e.key === 'Escape' || e.key === 'Backspace') stopPlayback();
+        // If controls are hidden, any button press wakes them up first
+        if (!playerControls.classList.contains('visible')) {
+          showPlayerControls();
+          return;
+        }
+
+        showPlayerControls(); // Reset auto-hide timer on key press
+
+        if (e.key === 'ArrowDown') {
+          if (currentPlayerBtnIndex === 0) updatePlayerBtnFocus(2); // Jump to Play/Pause
+        }
+        if (e.key === 'ArrowUp') {
+          if (currentPlayerBtnIndex > 0) updatePlayerBtnFocus(0); // Jump to Home Screen
+        }
+        if (e.key === 'ArrowRight') {
+          if (currentPlayerBtnIndex > 0 && currentPlayerBtnIndex < 3) updatePlayerBtnFocus(currentPlayerBtnIndex + 1);
+        }
+        if (e.key === 'ArrowLeft') {
+          if (currentPlayerBtnIndex > 1) updatePlayerBtnFocus(currentPlayerBtnIndex - 1);
+        }
+
+        if (e.key === 'Escape' || e.key === 'Backspace') {
+          stopPlayback();
+        }
+
+        if (e.key === 'Enter') {
+          if (currentPlayerBtnIndex === 0) stopPlayback(); // Return to Home
+          if (currentPlayerBtnIndex === 1) videoPlayer.currentTime -= 10; // Rewind 10s
+          if (currentPlayerBtnIndex === 2) { // Play/Pause toggle
+            if (videoPlayer.paused) {
+              videoPlayer.play();
+              document.getElementById('pBtnPlayPause').innerText = '❚❚ Pause';
+            } else {
+              videoPlayer.pause();
+              document.getElementById('pBtnPlayPause').innerText = '► Play';
+            }
+          }
+          if (currentPlayerBtnIndex === 3) videoPlayer.currentTime += 10; // Fast Forward 10s
+        }
       }
     });
   </script>
