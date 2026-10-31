@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>TV Streaming Dashboard</title>
+  <style>
+    body { background-color: #141414; color: #fff; font-family: sans-serif; margin: 20px; }
+    h2 { margin-left: 10px; }
+    .grid { display: flex; gap: 15px; overflow-x: hidden; padding: 10px; }
+    .card {
+      width: 180px; height: 260px; background-color: #333; border-radius: 8px;
+      display: flex; align-items: center; justify-content: center;
+      border: 4px solid transparent; transition: transform 0.2s, border-color 0.2s;
+    }
+    /* Highlight state for TV Remote selection */
+    .card.focused {
+      border-color: #e50914;
+      transform: scale(1.08);
+      outline: none;
+    }
+  </style>
+</head>
+<body>
+
+  <h2>Trending Shows</h2>
+  <div class="grid" id="movieGrid">
+    <div class="card focused" tabindex="0" data-video="https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4">Movie 1</div>
+    <div class="card" tabindex="0" data-video="https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ElephantsDream.mp4">Movie 2</div>
+    <div class="card" tabindex="0" data-video="https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerBlazes.mp4">Movie 3</div>
+  </div>
+
+  <script>
+    const cards = Array.from(document.querySelectorAll('.card'));
+    let currentIndex = 0;
+
+    function updateFocus(newIndex) {
+      if (newIndex >= 0 && newIndex < cards.length) {
+        cards[currentIndex].classList.remove('focused');
+        currentIndex = newIndex;
+        cards[currentIndex].classList.add('focused');
+        cards[currentIndex].scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'center' });
+      }
+    }
+
+    // Handle TV Remote Button Presses
+    document.addEventListener('keydown', (e) => {
+      switch (e.key) {
+        case 'ArrowRight':
+          updateFocus(currentIndex + 1);
+          break;
+        case 'ArrowLeft':
+          updateFocus(currentIndex - 1);
+          break;
+        case 'Enter':
+          const videoUrl = cards[currentIndex].getAttribute('data-video');
+          window.location.href = videoUrl; // Open/play video link
+          break;
+      }
+    });
+  </script>
+</body>
+</html>
