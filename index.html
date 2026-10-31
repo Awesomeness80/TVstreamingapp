@@ -4,15 +4,48 @@
   <meta charset="UTF-8">
   <title>Personal TV Dashboard</title>
   <style>
-    body { background-color: #141414; color: #fff; font-family: sans-serif; margin: 0; padding: 20px; overflow: hidden; }
-    h2 { margin-left: 10px; }
-    .grid { display: flex; gap: 15px; padding: 10px; }
-    .card {
-      width: 180px; height: 260px; background-color: #333; border-radius: 8px;
-      border: 4px solid transparent; transition: transform 0.2s, border-color 0.2s;
-      overflow: hidden; cursor: pointer;
+    body { 
+      background-color: #141414; 
+      color: #fff; 
+      font-family: sans-serif; 
+      margin: 0; 
+      padding: 20px; 
+      overflow-x: hidden; 
     }
-    .card.focused { border-color: #e50914; transform: scale(1.08); outline: none; }
+    h2 { margin-left: 10px; }
+
+    /* Scrollable Row Styling */
+    .grid { 
+      display: flex; 
+      gap: 15px; 
+      padding: 20px 10px; 
+      overflow-x: auto; /* Side-to-side scrolling */
+      scroll-behavior: smooth;
+      scrollbar-width: none; /* Hide scrollbar on Firefox/TVs */
+    }
+    .grid::-webkit-scrollbar {
+      display: none; /* Hide scrollbar on Chrome/Safari/Smart TVs */
+    }
+
+    /* Fixed-size Cards to Prevent Squishing */
+    .card {
+      min-width: 180px; 
+      width: 180px; 
+      height: 260px; 
+      background-color: #333; 
+      border-radius: 8px;
+      border: 4px solid transparent; 
+      transition: transform 0.2s, border-color 0.2s;
+      flex-shrink: 0; /* Prevents cards from squishing together */
+      overflow: hidden; 
+      cursor: pointer;
+    }
+    .card.focused { 
+      border-color: #e50914; 
+      transform: scale(1.08); 
+      outline: none; 
+      z-index: 5;
+    }
 
     /* Netflix-style Details Sidebar Overlay */
     .details-overlay {
@@ -71,17 +104,15 @@
 </head>
 <body>
 
-<h2>Trending Shows</h2>
+  <h2>Trending Shows</h2>
   <div class="grid" id="movieGrid">
-    <!-- Movie 1 -->
     <div class="card focused" tabindex="0" 
-         data-title="Terminator 2" 
-         data-desc="It's Nothing Persanol"
-         data-video="https://dn710702.ca.archive.org/0/items/terminator-2-judgment-day-1991-blu-ray-v-2-720p-fzmovies.net-4beb-52c-21b-25a-27018a-52684ae-967a-6d/Terminator_2__Judgment_Day_(1991)_BluRay%20v2_720p_(fzmovies.net)_4beb52c21b25a27018a52684ae967a6d.mp4">
-      <img src="https://i.ebayimg.com/thumbs/images/g/XT8AAOSwDaBcM3jf/s-l500.jpg" style="width:100%; height:100%; object-fit:cover;">
+         data-title="Big Buck Bunny" 
+         data-desc="A giant rabbit with a heart of gold deals with forest bullies."
+         data-video="https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4">
+      <img src="https://upload.wikimedia.org/wikipedia/commons/c/c5/Big_buck_bunny_poster_big.bjp.jpg" style="width:100%; height:100%; object-fit:cover;">
     </div>
     
-    <!-- Movie 2 -->
     <div class="card" tabindex="0" 
          data-title="Elephant's Dream" 
          data-desc="Two friends explore a strange machine-driven world."
@@ -89,47 +120,10 @@
       <img src="https://upload.wikimedia.org/wikipedia/commons/e/e8/Elephants_Dream_poster.jpg" style="width:100%; height:100%; object-fit:cover;">
     </div>
 
-    <!-- Movie 3 -->
-    <div class="card" tabindex="0" 
-         data-title="Elephant's Dream" 
-         data-desc="Two friends explore a strange machine-driven world."
-         data-video="https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ElephantsDream.mp4">
-      <img src="https://upload.wikimedia.org/wikipedia/commons/e/e8/Elephants_Dream_poster.jpg" style="width:100%; height:100%; object-fit:cover;">
-    </div>
-<!-- Movie 3 -->
-    <div class="card" tabindex="0" 
-         data-title="Movie Three" 
-         data-desc="Description for movie 3."
-         data-video="YOUR_VIDEO_URL_3.mp4">
-      <img src="YOUR_THUMBNAIL_URL_3.jpg" style="width:100%; height:100%; object-fit:cover;">
-    </div>
+    <!-- PASTE YOUR NEW MOVIE CARDS HERE -->
 
-    <!-- Movie 4 -->
-    <div class="card" tabindex="0" 
-         data-title="Movie Four" 
-         data-desc="Description for movie 4."
-         data-video="YOUR_VIDEO_URL_4.mp4">
-      <img src="YOUR_THUMBNAIL_URL_4.jpg" style="width:100%; height:100%; object-fit:cover;">
-    </div>
+  </div>
 
-    <!-- Movie 5 -->
-    <div class="card" tabindex="0" 
-         data-title="Movie Three" 
-         data-desc="Description for movie 3."
-         data-video="YOUR_VIDEO_URL_3.mp4">
-      <img src="YOUR_THUMBNAIL_URL_3.jpg" style="width:100%; height:100%; object-fit:cover;">
-    </div>
-
-    <!-- Movie 6 -->
-    <div class="card" tabindex="0" 
-         data-title="Movie Four" 
-         data-desc="Description for movie 4."
-         data-video="YOUR_VIDEO_URL_4.mp4">
-      <img src="YOUR_THUMBNAIL_URL_4.jpg" style="width:100%; height:100%; object-fit:cover;">
-    </div>
-
-    <!-- (Repeat this pattern for Movies 5 through 13!) -->
-  </div> <!-- <-- PASTE YOUR NEW MOVIES RIGHT BEFORE THIS LINE -->
   <!-- Left Sidebar Details Screen -->
   <div class="details-overlay" id="detailsScreen">
     <div class="details-content">
@@ -191,6 +185,13 @@
         cards[currentCardIndex].classList.remove('focused');
         currentCardIndex = newIndex;
         cards[currentCardIndex].classList.add('focused');
+        
+        // Auto-scroll the page horizontally to focus the selected card
+        cards[currentCardIndex].scrollIntoView({ 
+          behavior: 'smooth', 
+          block: 'nearest', 
+          inline: 'center' 
+        });
       }
     }
 
@@ -277,19 +278,18 @@
         }
       } 
       else if (activeMode === 'PLAYER') {
-        // If controls are hidden, any button press wakes them up first
         if (!playerControls.classList.contains('visible')) {
           showPlayerControls();
           return;
         }
 
-        showPlayerControls(); // Reset auto-hide timer on key press
+        showPlayerControls();
 
         if (e.key === 'ArrowDown') {
-          if (currentPlayerBtnIndex === 0) updatePlayerBtnFocus(2); // Jump to Play/Pause
+          if (currentPlayerBtnIndex === 0) updatePlayerBtnFocus(2);
         }
         if (e.key === 'ArrowUp') {
-          if (currentPlayerBtnIndex > 0) updatePlayerBtnFocus(0); // Jump to Home Screen
+          if (currentPlayerBtnIndex > 0) updatePlayerBtnFocus(0);
         }
         if (e.key === 'ArrowRight') {
           if (currentPlayerBtnIndex > 0 && currentPlayerBtnIndex < 3) updatePlayerBtnFocus(currentPlayerBtnIndex + 1);
@@ -303,9 +303,9 @@
         }
 
         if (e.key === 'Enter') {
-          if (currentPlayerBtnIndex === 0) stopPlayback(); // Return to Home
-          if (currentPlayerBtnIndex === 1) videoPlayer.currentTime -= 10; // Rewind 10s
-          if (currentPlayerBtnIndex === 2) { // Play/Pause toggle
+          if (currentPlayerBtnIndex === 0) stopPlayback();
+          if (currentPlayerBtnIndex === 1) videoPlayer.currentTime -= 10;
+          if (currentPlayerBtnIndex === 2) {
             if (videoPlayer.paused) {
               videoPlayer.play();
               document.getElementById('pBtnPlayPause').innerText = '❚❚ Pause';
@@ -314,7 +314,7 @@
               document.getElementById('pBtnPlayPause').innerText = '► Play';
             }
           }
-          if (currentPlayerBtnIndex === 3) videoPlayer.currentTime += 10; // Fast Forward 10s
+          if (currentPlayerBtnIndex === 3) videoPlayer.currentTime += 10;
         }
       }
     });
